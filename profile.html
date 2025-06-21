@@ -5,6 +5,7 @@
   <title>Profil Pengguna</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js -->
   <style>
     .profile-card {
       background: white;
@@ -77,6 +78,10 @@
       </thead>
       <tbody id="riwayatBody"></tbody>
     </table>
+
+    <!-- 📈 Grafik Transaksi -->
+    <h3 style="margin-top:40px;">📊 Grafik Transaksi Harian</h3>
+    <canvas id="grafikTransaksi" height="150"></canvas>
   </div>
 
   <script>
@@ -107,6 +112,46 @@
       window.location.href = "login.html";
     }
 
+    // 🔁 Fungsi render grafik
+    function tampilkanGrafik(data) {
+      const dataPerTanggal = {};
+
+      data.forEach(item => {
+        const tanggal = new Date(item.waktu || item.createdAt).toLocaleDateString("id-ID");
+        dataPerTanggal[tanggal] = (dataPerTanggal[tanggal] || 0) + 1;
+      });
+
+      const labels = Object.keys(dataPerTanggal);
+      const jumlah = Object.values(dataPerTanggal);
+
+      const ctx = document.getElementById("grafikTransaksi").getContext("2d");
+
+      if (window.grafikInstance) window.grafikInstance.destroy();
+
+      window.grafikInstance = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Jumlah Transaksi",
+            data: jumlah,
+            backgroundColor: "#4CAF50"
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1
+              }
+            }
+          }
+        }
+      });
+    }
+
     // 🔽 Fetch riwayat saldo
     fetch("https://dana-clone.onrender.com/api/saldo/riwayat", {
       headers: { Authorization: `Bearer ${token}` }
@@ -126,18 +171,20 @@
         row.innerHTML = `
           <td>${item.tipe}</td>
           <td>Rp ${item.jumlah.toLocaleString("id-ID")}</td>
-          <td>${item.status}</td>
+          <td>${item.status || "-"}</td>
           <td>${item.keterangan || "-"}</td>
           <td>${new Date(item.waktu || item.createdAt).toLocaleString("id-ID")}</td>
         `;
         tbody.appendChild(row);
       });
+
+      // Tampilkan grafik setelah render tabel
+      tampilkanGrafik(data);
     })
     .catch(err => {
       console.error("❌ ERROR:", err);
       document.getElementById("msg").innerText = "Gagal memuat riwayat.";
     });
   </script>
-
 </body>
 </html>
