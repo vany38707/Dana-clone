@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
   <title>Profil Pengguna</title>
@@ -10,13 +10,13 @@
       background: white;
       padding: 30px;
       border-radius: 10px;
-      width: 320px;
+      width: 90%;
+      max-width: 700px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      margin: 100px auto;
-      text-align: center;
+      margin: 50px auto;
     }
-    .profile-card h2 {
-      margin-bottom: 20px;
+    .profile-card h2, h3 {
+      text-align: center;
     }
     .profile-info {
       text-align: left;
@@ -30,6 +30,24 @@
       font-weight: bold;
       border-radius: 5px;
       cursor: pointer;
+      margin-top: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+    #msg {
+      text-align: center;
+      color: gray;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -43,6 +61,22 @@
       <p><strong>Role:</strong> <span id="profileRole">...</span></p>
     </div>
     <button class="logout-btn" onclick="logout()">Logout</button>
+
+    <hr />
+    <h3>🧾 Riwayat Transaksi Saldo</h3>
+    <div id="msg">Memuat data...</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Tipe</th>
+          <th>Jumlah</th>
+          <th>Status</th>
+          <th>Keterangan</th>
+          <th>Waktu</th>
+        </tr>
+      </thead>
+      <tbody id="riwayatBody"></tbody>
+    </table>
   </div>
 
   <script>
@@ -63,15 +97,46 @@
 
     const user = decodeTokenPayload(token);
     if (user) {
-      document.getElementById("profileUsername").innerText = user.username;
-      document.getElementById("profileEmail").innerText = user.email;
-      document.getElementById("profileRole").innerText = user.role;
+      document.getElementById("profileUsername").innerText = user.username || "-";
+      document.getElementById("profileEmail").innerText = user.email || "-";
+      document.getElementById("profileRole").innerText = user.role || "-";
     }
 
     function logout() {
       localStorage.removeItem("token");
       window.location.href = "login.html";
     }
+
+    // 🔽 Fetch riwayat saldo
+    fetch("https://dana-clone.onrender.com/api/saldo/riwayat", {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    .then(res => res.json())
+    .then(data => {
+      const tbody = document.getElementById("riwayatBody");
+      const msg = document.getElementById("msg");
+      tbody.innerHTML = "";
+      if (data.length === 0) {
+        msg.innerText = "Belum ada transaksi.";
+        return;
+      }
+      msg.innerText = "";
+      data.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${item.tipe}</td>
+          <td>Rp ${item.jumlah.toLocaleString("id-ID")}</td>
+          <td>${item.status}</td>
+          <td>${item.keterangan || "-"}</td>
+          <td>${new Date(item.waktu || item.createdAt).toLocaleString("id-ID")}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    })
+    .catch(err => {
+      console.error("❌ ERROR:", err);
+      document.getElementById("msg").innerText = "Gagal memuat riwayat.";
+    });
   </script>
 
 </body>
