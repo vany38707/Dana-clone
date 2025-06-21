@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const aktivitasSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "User",           // 🔗 Relasi ke user
     required: true,
   },
   tipe: {
@@ -15,9 +15,18 @@ const aktivitasSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  keterangan: {
+    type: String,
+    default: "",           // 📄 opsional: bisa tulis "Top up dari ShopeePay", dll
+  },
+  status: {
+    type: String,
+    enum: ["berhasil", "gagal", "pending"],
+    default: "berhasil",   // ✅ default berhasil
+  },
   waktu: {
     type: Date,
-    default: Date.now,
+    default: Date.now,     // 🕒 waktu otomatis
   },
 });
 
