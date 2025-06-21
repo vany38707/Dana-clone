@@ -4,7 +4,7 @@ const User = require("../models/User");
 const verifyToken = require("../middleware/verifyToken");
 const Aktivitas = require("../models/Aktivitas");
 
-// 🔼 Route Top Up Saldo
+// 🔼 Top Up Saldo
 router.post("/topup", verifyToken, async (req, res) => {
   try {
     const userId = req.user.id;
@@ -26,17 +26,14 @@ router.post("/topup", verifyToken, async (req, res) => {
       jumlah,
     });
 
-    res.json({
-      msg: "Top up berhasil",
-      saldoBaru: user.saldo,
-    });
+    res.json({ msg: "Top up berhasil", saldoBaru: user.saldo });
   } catch (err) {
     console.error("❌ ERROR TOPUP:", err);
     res.status(500).json({ msg: "Terjadi kesalahan server saat top up" });
   }
 });
 
-// 🔽 Route Tarik Saldo
+// 🔽 Tarik Saldo
 router.post("/tarik", verifyToken, async (req, res) => {
   try {
     const userId = req.user.id;
@@ -62,17 +59,14 @@ router.post("/tarik", verifyToken, async (req, res) => {
       jumlah,
     });
 
-    res.json({
-      msg: "Tarik saldo berhasil",
-      saldoBaru: user.saldo,
-    });
+    res.json({ msg: "Tarik saldo berhasil", saldoBaru: user.saldo });
   } catch (err) {
     console.error("❌ ERROR TARIK:", err);
     res.status(500).json({ msg: "Terjadi kesalahan saat tarik saldo" });
   }
 });
 
-// 🔁 Route Refund Saldo
+// ♻️ Refund Saldo
 router.post("/refund", verifyToken, async (req, res) => {
   try {
     const userId = req.user.id;
@@ -94,17 +88,14 @@ router.post("/refund", verifyToken, async (req, res) => {
       jumlah,
     });
 
-    res.json({
-      msg: "Refund berhasil",
-      saldoBaru: user.saldo,
-    });
+    res.json({ msg: "Refund berhasil", saldoBaru: user.saldo });
   } catch (err) {
     console.error("❌ ERROR REFUND:", err);
     res.status(500).json({ msg: "Terjadi kesalahan saat refund" });
   }
 });
 
-module.exports = router;
+// 📋 Riwayat Aktivitas
 router.get("/riwayat", verifyToken, async (req, res) => {
   try {
     const riwayat = await Aktivitas.find({ user: req.user.id }).sort({ waktu: -1 });
@@ -114,3 +105,5 @@ router.get("/riwayat", verifyToken, async (req, res) => {
     res.status(500).json({ msg: "Gagal mengambil riwayat aktivitas" });
   }
 });
+
+module.exports = router; // ⬅️ HARUS DITARUH PALING BAWAH
