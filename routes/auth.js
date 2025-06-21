@@ -4,16 +4,20 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-// REGISTER
+// ===========================
+// ✅ REGISTER
+// ===========================
 router.post("/register", async (req, res) => {
   const { username, email, password, role } = req.body;
 
   try {
     console.log("📥 Data register masuk:", req.body);
 
-    // Cek apakah user sudah ada
+    // Cek apakah email sudah terdaftar
     const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ msg: "Email sudah terdaftar" });
+    if (existingUser) {
+      return res.status(400).json({ msg: "Email sudah terdaftar" });
+    }
 
     // Enkripsi password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -30,28 +34,48 @@ router.post("/register", async (req, res) => {
 
     res.status(201).json({ msg: "Pendaftaran berhasil", userId: newUser._id });
   } catch (err) {
+    console.error("❌ Error saat register:", err);
     res.status(500).json({ msg: "Terjadi kesalahan server" });
   }
 });
 
-// LOGIN
+// ===========================
+// ✅ LOGIN
+// ===========================
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    // Cek apakah user ada
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ msg: "Email tidak ditemukan" });
+    if (!user) {
+      return res.status(400).json({ msg: "Email tidak ditemukan" });
+    }
 
+    // Cek password
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: "Password salah" });
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Password salah" });
+    }
 
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
+    // Generate token
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        role: user.role,
+        saldo: user.saldo,
+      },
     });
-
-    res.json({ token, user: { id: user._id, name: user.name, role: user.role, saldo: user.saldo } });
   } catch (err) {
-    console.error("❌ ERROR REGISTER:", err);
+    console.error("❌ Error saat login:", err);
     res.status(500).json({ msg: "Terjadi kesalahan server" });
   }
 });
