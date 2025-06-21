@@ -1,1 +1,75 @@
-<h1>Halo</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1>📊 Dashboard Admin</h1>
+    <a href="profile.html" style="margin-top: 10px; display: inline-block;">👤 Profil</a>
+    <p id="adminInfo">Selamat datang, PENGHASIL CUAN</p>
+    <button onclick="logout()">Logout</button>
+    <label class="switch">
+      <input type="checkbox" id="darkModeToggle" />
+      <span class="slider round"></span> 🌙
+    </label>
+  </header>
+
+  <!-- Statistik Kartu -->
+  <section id="statistikCards" class="card-grid">
+    <div class="card" id="cardTopup">💰 Top Up: <span>...</span></div>
+    <div class="card" id="cardTarik">💸 Tarik: <span>...</span></div>
+    <div class="card" id="cardRefund">🔁 Refund: <span>...</span></div>
+    <div class="card" id="cardTotal">📊 Total: <span>...</span></div>
+  </section>
+
+  <!-- Tombol -->
+  <div class="controls">
+    <div>
+  <label>Dari: <input type="date" id="tanggalDari" /></label>
+  <label>Sampai: <input type="date" id="tanggalSampai" /></label>
+  <button onclick="filterTanggal()">🔎 Filter Tanggal</button>
+   </div>
+    <button onclick="loadUsers()">📋 Lihat Semua Pengguna</button>
+    <button onclick="loadAktivitas()">📄 Lihat Semua Aktivitas</button>
+    <select id="filterTipe" onchange="filterAktivitas()">
+      <option value="">-- Filter Tipe --</option>
+      <option value="topup">Top Up</option>
+      <option value="tarik">Tarik</option>
+      <option value="refund">Refund</option>
+    </select>
+  </div>
+
+  <div id="output"></div>
+
+  <!-- Grafik -->
+  <section class="charts">
+    <div class="chart">
+      <h2>📈 Grafik Harian</h2>
+      <canvas id="grafikHarian" width="600" height="300"></canvas>
+      <button onclick="exportChart('grafikHarian')">⬇️ Export Gambar</button>
+    </div>
+
+    <div class="chart">
+      <h2>🥧 Grafik Role Pengguna</h2>
+      <canvas id="grafikPengguna" width="400" height="250"></canvas>
+      <button onclick="exportChart('grafikPengguna')">⬇️ Export Gambar</button>
+    </div>
+
+    <div class="chart">
+      <h2>📊 Grafik Statistik Transaksi</h2>
+      <canvas id="grafikStatistik" width="400" height="200"></canvas>
+      <canvas id="pieStatistik" width="400" height="200"></canvas>
+      <button onclick="exportChart('grafikStatistik')">⬇️ Export Batang</button>
+      <button onclick="exportChart('pieStatistik')">⬇️ Export Pie</button>
+    </div>
+  </section>
+
+  <script src="admin.js"></script>
+</body>
+</html>

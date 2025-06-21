@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Daftar Akun</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    button.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+button.loading::after {
+  content: '⏳';
+  margin-left: 8px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+    .input-icon {
+  position: relative;
+}
+
+.input-icon i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+}
+
+.input-icon input {
+  padding-left: 36px; /* beri ruang untuk ikon */
+}
+
+    input.valid {
+  border: 2px solid green;
+}
+input.invalid {
+  border: 2px solid red;
+}
+
+ body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #ece9e6, #ffffff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+form {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  width: 320px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transition: 0.3s ease;
+}
+
+form h2 {
+  margin-bottom: 25px;
+  text-align: center;
+  color: #444;
+}
+
+.input-icon-right {
+  position: relative;
+}
+
+.input-icon-right i.fa-lock {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+}
+
+.input-icon-right i.fa-eye,
+.input-icon-right i.fa-eye-slash {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #888;
+}
+
+.input-icon-right input {
+  padding-left: 36px;
+  padding-right: 36px;
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+input:focus {
+  border-color: #673ab7;
+  box-shadow: 0 0 5px rgba(103, 58, 183, 0.3);
+}
+
+input.valid {
+  border-color: #4CAF50;
+}
+
+input.invalid {
+  border-color: #F44336;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #673ab7;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #5e35b1;
+}
+
+small {
+  font-size: 13px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+label {
+  font-size: 14px;
+  color: #666;
+}
+
+a {
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+  color: #555;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #000;
+}
+
+  </style>
+
+</head>
+<body>
+  <form onsubmit="register(event)">
+    <h2>📝 Daftar Akun</h2>
+    <input type="text" id="username" placeholder="Nama Pengguna" required />
+    <div class="input-icon-right">
+  <i class="fa fa-user"></i>
+  <input type="text" id="username" placeholder="Nama Pengguna" required />
+</div>
+    <input type="email" id="email" placeholder="Email" required />
+<div class="input-icon-right">
+  <i class="fa fa-envelope"></i>
+  <input type="email" id="email" placeholder="Email" required />
+</div>
+    <input type="password" id="password" placeholder="Password" required />
+    <div class="input-icon-right">
+  <i class="fa fa-lock"></i>
+  <input type="password" id="password" placeholder="Password" required />
+  <div class="input-icon-right">
+  <i class="fa fa-lock"></i>
+  <input type="password" id="confirmPassword" placeholder="Ulangi Password" required />
+  <i class="fa fa-eye" onclick="toggleVisibility('confirmPassword', this)"></i>
+</div>
+  <i class="fa fa-eye" onclick="toggleVisibility('password', this)"></i>
+</div>
+    <button type="submit">Daftar</button>
+    <a href="login.html">Sudah punya akun? Login</a>
+  </form>
+
+  <script>
+    <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+/>
+    function register(e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value;
+      <div class="input-icon">
+  <i class="fa fa-user"></i>
+  <input type="text" id="username" placeholder="Nama Pengguna" required />
+</div>
+     if (username.length < 3) {
+  info.innerText = "Username minimal 3 karakter";
+  info.style.color = "gray";
+  this.classList.remove("valid", "invalid");
+  return;
+}
+
+      const email = document.getElementById("email").value;
+      <div class="input-icon">
+  <i class="fa fa-envelope"></i>
+  <input type="email" id="email" placeholder="Email" required />
+</div>
+
+      const password = document.getElementById("password").value;
+      <input type="password" id="confirmPassword" placeholder="Ulangi Password" required />
+      const type = pw.type === "password" ? "text" : "password";
+    pw.type = type;
+    cpw.type = type;
+
+if (password.length < 6) {
+  alert("Password minimal 6 karakter.");
+  return;
+}<label>
+  <input type="checkbox" onclick="togglePasswordVisibility()" />
+  Tampilkan Password
+</label> 
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (!emailRegex.test(email)) {
+  alert("Email tidak valid.");
+  return;
+}
+
+
+      fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, email, password }),
+        
+      })
+        .then(res => res.json())
+        .then(data => {
+            if (data.tersedia) {
+  info.innerText = "✅ Username tersedia";
+  info.style.color = "green";
+  this.classList.add("valid");
+  this.classList.remove("invalid");
+} else {
+  info.innerText = "❌ Username sudah digunakan";
+  info.style.color = "red";
+  this.classList.add("invalid");
+  this.classList.remove("valid");
+}
+          if (data.token) {
+            localStorage.setItem("token", data.token);
+            alert("Registrasi berhasil!");
+            window.location.href = "index.html";
+          } else {
+            alert(data.msg || "Registrasi gagal");
+          }
+        })
+        .catch(err => {
+          console.error("Register error:", err);
+          alert("Terjadi kesalahan saat mendaftar.");
+        });
+    }
+  </script>
+</body>
+</html>
